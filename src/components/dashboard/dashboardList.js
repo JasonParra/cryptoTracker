@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ListItem } from 'react-native-elements'
-import api from "../../api/api"
+import {cryptoToCurrency} from "../../api/api"
 
 // const list = [
 //   {
@@ -27,7 +27,7 @@ export default class DashboardList extends React.Component {
 
 
   componentDidMount= async ()=>{
-   const response = await api.getData()
+   const response = await cryptoToCurrency("BTC","USD")
    this.setState({
      data:response.data
    })
