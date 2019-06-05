@@ -1,8 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ListItem } from 'react-native-elements'
-import {getRequest} from "../../api/api"
-import axios from "axios"
+import api from "../../api/api"
 
 // const list = [
 //   {
@@ -28,17 +27,12 @@ export default class DashboardList extends React.Component {
 
 
   componentDidMount= async ()=>{
-    await this.getData()
-  }
+   const response = await api.getData()
+   this.setState({
+     data:response.data
+   })
 
-  getData = ()=>{
-    axios.get("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,JPY,EUR&api_key={e49f0c3d16d1d870dd7935b2964b0439059d9bd1601ecb1c64950a102f04ce6b}")
-    .then(response=>{
-      console.log(response.data)
-      this.setState({
-        data: response.data
-      })
-    })
+
   }
 
   render() {
