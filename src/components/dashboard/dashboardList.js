@@ -1,64 +1,63 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ListItem } from 'react-native-elements'
-import {cryptoToCurrency} from "../../api/api"
-
-// const list = [
-//   {
-//     name: 'Amy Farha',
-//     avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-//     subtitle: 'Vice President'
-//   },
-//   {
-//     name: 'Chris Jackson',
-//     avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-//     subtitle: 'Vice Chairman'
-//   }
-// ]
+import {cryptoToCurrency,getTopCurrencyByMarketCap} from "../../api/api"
 
 export default class DashboardList extends React.Component {
   
   constructor(){
     super();
     this.state={
-      data:{}
+      data:{},
+      quantityList:10,
+      isLoading:true
     }
   }
 
 
   componentDidMount= async ()=>{
-   const response = await cryptoToCurrency("BTC","USD")
-   this.setState({
-     data:response.data
-   })
+  const {quantityList} = this.state
+   const response = await getTopCurrencyByMarketCap("USD",quantityList)
+   await this.setState({
+     data:response.data,
+   },()=>console.log(this.state.data))
+  }
 
+  renderRows =()=>{
+    const data = Array.isArray(this.state.data.Data) ? this.state.data.Data.map(item=>{
+      return (<View style={{display:"flex",flexDirection:"row",justifyContent:"space-between",width:300}}>
+        <Text>{item.CoinInfo.FullName}</Text>
+        <Text>{item.DISPLAY.USD.PRICE}</Text>
+      </View>)
+    }) : <View></View>
 
+    return data;
   }
 
   render() {
+    const {quantityList} = this.state
     return (
-      <View>
-        <Text>{JSON.stringify(this.state.data)}</Text>
-         {/* {
-          list.map((l, i) => (
-            <ListItem
-              key={i}
-              leftAvatar={{ source: { uri: l.avatar_url } }}
-              title={l.name}
-              subtitle={l.subtitle}
-            />
-            ))
-          } */}
+      <View style={styles.container}>
+        <Text style={styles.title}>Top {quantityList} List </Text>
+         {
+          this.renderRows()
+        } 
       </View>
     );
   }
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title:{
+    display:"flex",
+    justifyContent:"center",
+    fontSize:14,
+    marginBottom:50,
+  }
+});
