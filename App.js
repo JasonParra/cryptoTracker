@@ -5,7 +5,7 @@ import Dashboard from './src/containers/dashboard/dashboard';
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View >
         <Dashboard/>
       </View>
     );
@@ -13,10 +13,10 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: '#fff',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
 });

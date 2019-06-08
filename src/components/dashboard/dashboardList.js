@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ListItem } from 'react-native-elements'
-import {cryptoToCurrency,getTopCurrencyByMarketCap} from "../../api/api"
+import { StyleSheet, Text, View,ScrollView,Picker } from 'react-native';
+import { Card,ListItem,Header,Input } from 'react-native-elements'
+import {getTopCurrencyByMarketCap} from "../../api/api"
 
 export default class DashboardList extends React.Component {
   
@@ -10,54 +10,111 @@ export default class DashboardList extends React.Component {
     this.state={
       data:{},
       quantityList:10,
-      isLoading:true
+      isLoading:true,
+      pickerQuantityVale:10
     }
   }
 
 
-  componentDidMount= async ()=>{
+  componentDidMount= ()=>{
   const {quantityList} = this.state
-   const response = await getTopCurrencyByMarketCap("USD",quantityList)
-   await this.setState({
-     data:response.data,
-   },()=>console.log(this.state.data))
+  this.getTopListData(quantityList)
   }
 
-  renderRows =()=>{
-    const data = Array.isArray(this.state.data.Data) ? this.state.data.Data.map(item=>{
-      return (<View style={{display:"flex",flexDirection:"row",justifyContent:"space-between",width:300}}>
-        <Text>{item.CoinInfo.FullName}</Text>
-        <Text>{item.DISPLAY.USD.PRICE}</Text>
-      </View>)
-    }) : <View></View>
+  handleInputs =(e)=>{
+    const {name,value}=e.target
+    this.setState({
+      [name]:value
+    })
+  }
 
-    return data;
+  handlePicker =(data)=>{
+    this.setState({
+      pickerQuantityVale:data,
+      isLoading:true
+    },()=>{this.getTopListData(this.state.pickerQuantityVale)})
+  }
+
+  getTopListData=async (top)=>{
+    const response = await getTopCurrencyByMarketCap("USD",top)
+    await this.setState({
+      data:response.data,
+    },()=>this.setState({
+      isLoading:false
+    }))
+  } 
+
+
+  renderRows =()=>{
+    const data = this.state.data.Data.map(item=>{
+      return (
+        <Card key={item.CoinInfo.Name}>
+          <ListItem
+          key={item.CoinInfo.Name}
+          title={item.CoinInfo.Name}
+          subtitle={item.CoinInfo.FullName}
+          rightTitle={item.DISPLAY.USD.PRICE}  
+          leftAvatar={{source:{uri: "https://www.cryptocompare.com" + item.CoinInfo.ImageUrl}}}
+          />
+        </Card >
+
+      )
+    }) 
+
+      return data;
   }
 
   render() {
-    const {quantityList} = this.state
+    const {quantityList,isLoading} = this.state
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Top {quantityList} List </Text>
-         {
-          this.renderRows()
-        } 
+      <View >
+        <Header
+          placement="left"
+          leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={
+          <Picker 
+          name='pickerQuantityVale'
+          style={styles.picker} 
+          selectedValue={this.state.pickerQuantityVale} 
+          onValueChange={this.handlePicker} >
+            <Picker.Item label = " 10" value = "10" />
+            <Picker.Item label = " 20" value = "20" />
+            <Picker.Item label = " 50" value = "50" />
+            <Picker.Item label = " 100" value = "100" />
+            <Picker.Item label = " 500" value = "500" />
+
+          </Picker>
+          }
+          rightComponent={{ icon: 'home', color: '#fff' }}
+        />
+      {!isLoading?
+      <View>
+      <Text style={styles.title}>Top {quantityList} List </Text>
+      <ScrollView>
+      {this.renderRows()}
+      </ScrollView>  
+      </View>
+      :null}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+
+  container:{
+
   },
+
   title:{
-    display:"flex",
+    flex:1,
     justifyContent:"center",
     fontSize:14,
-    marginBottom:50,
+    fontWeight: 'bold',
+  },
+  picker:{
+    height: 50, 
+    width: 100
   }
+
 });
