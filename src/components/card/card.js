@@ -1,19 +1,19 @@
-import React from 'react'
+import React from 'react';
 import PropTypes from 'prop-types'
-import { View, Image, StyleSheet, Text } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableHighlight } from 'react-native';
 
 
 const card = (props) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.card} key={props.key}>
+    <TouchableHighlight style={styles.container} onPress={props.onPress}>
+      <View style={styles.card} >
         <View style={styles.itemHorizontal}>
           <Image
             style={styles.icon}
             source={{ uri: props.uri }}
           />
           <View styles={styles.itemVertical}>
-            <Text style={styles.subName}>{props.subName}</Text>
+            <Text style={styles.fullName}>{props.fullName}</Text>
             <Text style={styles.name}>{props.name}</Text>
           </View>
         </View>
@@ -24,25 +24,26 @@ const card = (props) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableHighlight>
   )
 }
 
 card.propTypes = {
-  url: PropTypes.string.isRequired,
+  uri: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  fullName: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
-  key: PropTypes.number
+  Key: PropTypes.number
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   card: {
     borderColor: '#ddd',
     borderBottomWidth: 1,
-    padding: 5,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     fontFamily: 'Roboto'
   },
-  subName: {
+  fullName: {
     marginLeft: 15,
     fontWeight: '600',
     fontFamily: 'Roboto'
