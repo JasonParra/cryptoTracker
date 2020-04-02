@@ -47,6 +47,7 @@ export default class Dashboard extends React.Component {
       detailData: item ? {
         name: item.CoinInfo.Name,
         fullName: item.CoinInfo.FullName,
+        algo: item.CoinInfo.Algorithm,
         uri: "https://www.cryptocompare.com" + item.CoinInfo.ImageUrl
       } : {}
     })
