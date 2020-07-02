@@ -8,7 +8,7 @@ export default class NavigateBar extends React.Component {
     index: 0,
     routes: [
       { key: 'Top', title: 'Top', icon: 'trending-up' },
-      { key: 'Favorites', title: 'Favorites', icon: 'heart-outline' },
+      { key: 'Follow', title: 'Follow', icon: 'heart-outline' },
       { key: 'Wallet', title: 'Wallet', icon: 'wallet-outline' },
     ],
   };

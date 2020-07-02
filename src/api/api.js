@@ -7,9 +7,5 @@ export function cryptoToCurrency(crypto, currency) {
 }
 
 export function getTopCurrencyByMarketCap(currency, limit) {
-
-
-
-
-     return axios.get(`https://min-api.cryptocompare.com/data/top/mktcapfull?limit=${limit}&tsym=${currency}&api_key={${config.API_KEY}}`)
+     return axios.get(`https://min-api.cryptocompare.com/data/top/totaltoptiervolfull?limit=${limit}&tsym=${currency}`)
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import { View, Image, StyleSheet, Text, TouchableHighlight } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 
 const card = (props) => {
   return (
-    <TouchableHighlight style={styles.container} onPress={props.onPress}>
+    <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <View style={styles.card} >
         <View style={styles.itemHorizontal}>
           <Image
@@ -24,7 +24,7 @@ const card = (props) => {
           </Text>
         </View>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   )
 }
 

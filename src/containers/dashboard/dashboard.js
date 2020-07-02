@@ -117,27 +117,31 @@ export default class Dashboard extends React.Component {
         style={styles.searchInput}
         onChangeText={text => this.handleInputs({ target: { name: 'searchInput', value: text } })}
       />
-
       <ScrollView
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
             onRefresh={this.handleRefresh}
           />
-        }
-      >
+        }>
         {this.renderRows()}
-        <Button
-          buttonStyle={styles.moreButton}
-          onPress={this.handleLoadMore}
-          title="more">
-        </Button>
+        {!searchInput ?
+          <Button
+            contentStyle={styles.moreButton}
+            onPress={this.handleLoadMore}
+          >
+            Ver Mas
+          </Button> : null
+        }
       </ScrollView>
-      <CoinDetail
-        open={openDetail}
-        handleCoinDetail={this.handleCoinDetail}
-        {...detailData}
-      />
+      {openDetail ?
+        <CoinDetail
+          open={openDetail}
+          handleCoinDetail={this.handleCoinDetail}
+          {...detailData}
+        /> : null
+      }
+
     </View >
     )
   }
@@ -162,13 +166,15 @@ const styles = StyleSheet.create({
   },
   moreButton: {
     justifyContent: 'center',
-    backgroundColor: '#bdc3c7',
-    color: '#000000',
+    // backgroundColor: '#bdc3c7',
+    // color: '#000000',
     alignSelf: 'center',
+    // height: 70,
+    // width: 70,
+    // borderRadius: 50,
+    // borderWidth: 1,
+    // margin: 10,
     height: 70,
-    width: 70,
-    borderRadius: 50,
-    borderWidth: 1,
-    margin: 10
+    marginBottom: 70
   }
 });
