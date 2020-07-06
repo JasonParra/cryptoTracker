@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView, RefreshControl } from 'react-native';
 import { TextInput, Button } from 'react-native-paper'
 import { getTopCurrencyByMarketCap } from "../../api/api"
@@ -6,56 +6,42 @@ import Card from "../../components/card/card"
 import NavigateBar from '../../components/navigate-bar/navigate-bar'
 import CoinDetail from '../../components/coin-detail/coin-detail'
 
-export default class Dashboard extends React.Component {
+function Dashboard() {
 
-  constructor() {
-    super();
-    this.state = {
-      data: [],
-      dataCopy: [],
-      isLoading: false,
-      cryptoQuantity: 10,
-      searchInput: '',
-      openDetail: false,
-      detailData: {}
-    }
-  }
+  const [data, setData] = useState([])
+  const [dataCopy, setDataCopy] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [cryptoQuantity, setCryptoQuantity] = useState(10)
+  const [searchInput, setSearchInput] = useState('')
+  const [openDetail, setOpenDetail] = useState(false)
+  const [detailData, setDetailData] = useState({})
 
-  componentDidMount = () => {
-    const { cryptoQuantity } = this.state
+  useEffect(() => {
     this.getTopListData(cryptoQuantity)
-  }
+  }, [cryptoQuantity])
 
 
-  getTopListData = (top) => {
-    this.setState({
-      isLoading: true,
-    }, async () => {
-      const response = await getTopCurrencyByMarketCap("USD", top)
-      this.setState({
-        data: response.data.Data,
-        dataCopy: response.data.Data
-      }, () => this.setState({
-        isLoading: false
-      }))
-    })
+  getTopListData = async (top) => {
+    setIsLoading(true)
+    const response = await getTopCurrencyByMarketCap("USD", top)
+    setData(response.data.Data)
+    setDataCopy(response.data.Data)
+    setIsLoading(false)
   }
 
   handleCoinDetail = (e, item) => {
-    this.setState({
-      openDetail: !this.state.openDetail,
-      detailData: item ? {
-        name: item.CoinInfo.Name,
-        fullName: item.CoinInfo.FullName,
-        algo: item.CoinInfo.Algorithm,
-        uri: "https://www.cryptocompare.com" + item.CoinInfo.ImageUrl
-      } : {}
-    })
+    setOpenDetail(!openDetail)
+    setDetailData(item ? {
+      name: item.CoinInfo.Name,
+      fullName: item.CoinInfo.FullName,
+      algo: item.CoinInfo.Algorithm,
+      uri: "https://www.cryptocompare.com" + item.CoinInfo.ImageUrl
+    } : {}
+    )
   }
 
-
   renderRows = () => {
-    const data = this.state.data.map((item, index) => {
+    return data.map((item, index) => {
       return (
         <Card
           onPress={(e) => this.handleCoinDetail(e, item)}
@@ -68,67 +54,46 @@ export default class Dashboard extends React.Component {
         />
       )
     })
-    return data;
   }
 
-  handleLoadMore = () => {
-    this.setState({
-      cryptoQuantity: this.state.cryptoQuantity + 10
-    }, () => {
-      this.getTopListData(this.state.cryptoQuantity)
-    })
-  }
 
-  handleRefresh = () => {
-    this.getTopListData(this.state.cryptoQuantity)
-  }
-
-  handleInputs = (e) => {
+  handleSearchInput = (e) => {
     const { name, value } = e.target
-    this.setState({
-      [name]: value
-    }, () => {
-      if (name === 'searchInput')
-        this.handleSearch()
-    })
+    setSearchInput(value)
+    this.handleSearch(value)
   }
 
-  handleSearch = () => {
-    const { searchInput, dataCopy } = this.state
-    if (searchInput) {
+
+  handleSearch = (value) => {
+    if (value) {
       const re = new RegExp('\w*' + searchInput.toLocaleLowerCase() + '\w*');
-      this.setState({
-        data: dataCopy.filter(item => (item.CoinInfo.Name.toLocaleLowerCase()).match(re)
-          || item.CoinInfo.FullName.toLocaleLowerCase().match(re))
-      })
+      setData(dataCopy.filter(item => (item.CoinInfo.Name.toLocaleLowerCase()).match(re)
+        || item.CoinInfo.FullName.toLocaleLowerCase().match(re)))
     }
-    else this.setState({
-      data: dataCopy
-    })
+    else setData(dataCopy)
   }
 
   renderTopScene = () => {
-    const { isLoading, searchInput, openDetail, detailData } = this.state
     return (<View >
       <TextInput
         label={'search'}
         value={searchInput}
         name={'searchInput'}
         style={styles.searchInput}
-        onChangeText={text => this.handleInputs({ target: { name: 'searchInput', value: text } })}
+        onChangeText={text => this.handleSearchInput({ target: { name: 'searchInput', value: text } })}
       />
       <ScrollView
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
-            onRefresh={this.handleRefresh}
+            onRefresh={() => this.getTopListData(cryptoQuantity)}
           />
         }>
         {this.renderRows()}
         {!searchInput ?
           <Button
             contentStyle={styles.moreButton}
-            onPress={this.handleLoadMore}
+            onPress={() => setCryptoQuantity(cryptoQuantity + 10)}
           >
             Ver Mas
           </Button> : null
@@ -146,16 +111,15 @@ export default class Dashboard extends React.Component {
     )
   }
 
-  render() {
-    return (
-      <NavigateBar
-        TopScene={
-          this.renderTopScene()
-        }
-      />
-    );
-  }
+  return (
+    <NavigateBar
+      TopScene={
+        this.renderTopScene()
+      }
+    />
+  );
 }
+
 
 const styles = StyleSheet.create({
   backgroundColor: {
@@ -178,3 +142,6 @@ const styles = StyleSheet.create({
     marginBottom: 70
   }
 });
+
+export default Dashboard;
+
