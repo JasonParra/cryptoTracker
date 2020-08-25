@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, SafeAreaView, StatusBar, Platform } from 'react-native';
-import Dashboard from './src/containers/dashboard/dashboard';
+import Dashboard from './src/containers/dashboard';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 const theme = {

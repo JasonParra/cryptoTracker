@@ -1,10 +1,10 @@
 import React from 'react'
 import { Button } from 'react-native-paper';
 
-function button(props) {
+const button = (props) => {
   return (
     <div>
-      <Button onPress={props.onPress}>{props.text}</Button>
+      <Button icon={props.icon} onPress={props.onPress}>{props.text}</Button>
     </div>
   )
 }

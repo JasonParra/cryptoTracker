@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView, RefreshControl } from 'react-native';
 import { TextInput, Button } from 'react-native-paper'
 import { getTopCurrencyByMarketCap } from "../../api/api"
-import Card from "../../components/card/card"
-import NavigateBar from '../../components/navigate-bar/navigate-bar'
-import CoinDetail from '../../components/coin-detail/coin-detail'
+import Card from "../../components/card"
+import NavigateBar from '../../components/navigate-bar'
+import CoinDetail from '../../components/coin-detail'
 
 function Dashboard() {
 
