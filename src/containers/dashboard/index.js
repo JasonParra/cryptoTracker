@@ -1,33 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView, RefreshControl } from 'react-native';
 import { TextInput, Button } from 'react-native-paper'
-import { getTopCurrencyByMarketCap } from "../../api/api"
+import { getCryptos } from "../../redux/actions/crypto"
 import Card from "../../components/card"
 import NavigateBar from '../../components/navigate-bar'
 import CoinDetail from '../../components/coin-detail'
+import { useDispatch, useSelector } from 'react-redux'
 
 function Dashboard() {
 
-  const [data, setData] = useState([])
-  const [dataCopy, setDataCopy] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [cryptoQuantity, setCryptoQuantity] = useState(10)
   const [searchInput, setSearchInput] = useState('')
   const [openDetail, setOpenDetail] = useState(false)
   const [detailData, setDetailData] = useState({})
+  const data = useSelector(state => state.cryptos.cryptos)
+  const dataCopy = useSelector(state => state.cryptos.cryptos)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    this.getTopListData(cryptoQuantity)
+    dispatch(getCryptos("USD", cryptoQuantity))
   }, [cryptoQuantity])
-
-
-  getTopListData = async (top) => {
-    setIsLoading(true)
-    const response = await getTopCurrencyByMarketCap("USD", top)
-    setData(response.data.Data)
-    setDataCopy(response.data.Data)
-    setIsLoading(false)
-  }
 
   handleCoinDetail = (e, item) => {
     setOpenDetail(!openDetail)
@@ -41,7 +34,7 @@ function Dashboard() {
   }
 
   renderRows = () => {
-    return data.map((item, index) => {
+    return (data ? data.data.Data : []).map((item, index) => {
       return (
         <Card
           onPress={(e) => this.handleCoinDetail(e, item)}
@@ -86,7 +79,7 @@ function Dashboard() {
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
-            onRefresh={() => this.getTopListData(cryptoQuantity)}
+            onRefresh={() => setCryptoQuantity(cryptoQuantity)}
           />
         }>
         {this.renderRows()}
