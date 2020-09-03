@@ -6,24 +6,22 @@ import { StyleSheet } from 'react-native'
 function NavigateBar(props) {
 
   const [index, setIndex] = useState(0)
-  const [routes, setRoutes] = useState([
+  const [routes] = useState([
     { key: 'Top', title: 'Top', icon: 'trending-up' },
     { key: 'Follow', title: 'Follow', icon: 'heart-outline' },
     { key: 'Wallet', title: 'Wallet', icon: 'wallet-outline' },
-  ])
+  ]);
 
-  renderScene = ({ route, jumpTo }) => {
-    switch (route.key) {
-      case 'Top':
-        return props.TopScene
-    }
-  }
+  const { scenes } = props
+
+  const renderScene = BottomNavigation.SceneMap(scenes)
+
   return (
     <BottomNavigation
       barStyle={styles.container}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
-      renderScene={this.renderScene}
+      renderScene={renderScene}
       activeColor={'#000000'}
       inactiveColor={'#bdc3c7'}
     />

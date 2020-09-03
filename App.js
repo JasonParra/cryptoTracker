@@ -6,7 +6,7 @@ import store from "./src/redux/store";
 
 //Components
 import { StyleSheet, View, SafeAreaView, StatusBar, Platform } from 'react-native';
-import Dashboard from './src/containers/dashboard';
+import Navigator from './src/screens/navigator';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 const theme = {
@@ -26,7 +26,7 @@ export default class App extends React.Component {
         <PaperProvider theme={theme}>
           <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <View style={styles.container}>
-              <Dashboard />
+              <Navigator />
             </View>
           </SafeAreaView>
         </PaperProvider>

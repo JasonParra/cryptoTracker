@@ -1,15 +1,15 @@
 import {
-  GET_CRYPTOS
+  ADD_WALLET
 } from "../actions/types";
 
-export default function cryptos(state = { cryptos: null }, action) {
+export default function wallet(state = { wallets: [] }, action) {
   const { payload, type } = action;
 
   switch (type) {
-    case GET_CRYPTOS:
+    case ADD_WALLET:
       return {
         ...state,
-        cryptos: payload.data,
+        wallets: [...new Set([...state.wallets, payload.data])],
       };
     default:
       return state;

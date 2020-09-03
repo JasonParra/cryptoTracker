@@ -1,39 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-paper'
 
+const RowFollow = (props) => {
+  const { onPress, uri, name, price, Key } = props
 
-const card = (props) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={props.onPress}>
+    <TouchableOpacity style={styles.container} onPress={onPress} Key={Key}>
       <View style={styles.card} >
         <View style={styles.itemHorizontal}>
           <Image
             style={styles.icon}
-            source={{ uri: props.uri }}
+            source={{ uri: uri }}
           />
           <View styles={styles.itemVertical}>
-            <Text style={styles.fullName}>{props.fullName}</Text>
-            <Text style={styles.name}>{props.name}</Text>
+            <Text style={styles.fullName}>{name}</Text>
+            <Text style={styles.name}>{price}</Text>
           </View>
         </View>
         <View styles={styles.itemVertical}>
-          <Text style={styles.price}>{props.price}</Text>
-          <Text style={props.changePtc24 > 0 ? styles.changePtc24Positive : styles.changePtc24Negative}>
-            {props.changePtc24 + "%"}
-          </Text>
+          <Button icon={"heart"} />
         </View>
       </View>
     </TouchableOpacity>
   )
 }
 
-card.propTypes = {
+RowFollow.propTypes = {
   uri: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  fullName: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
-  Key: PropTypes.number
+  Key: PropTypes.number.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -95,4 +93,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default card;
+export default RowFollow;

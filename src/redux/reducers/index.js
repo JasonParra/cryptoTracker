@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
 
 //Reducers
-import cryptos from "./cryptos";
+import crypto from "./crypto";
+import wallet from "./wallet";
 
 export default combineReducers({
-  cryptos
+  crypto,
+  wallet
 });
